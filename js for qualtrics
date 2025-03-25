@@ -1,0 +1,33 @@
+console.log("Canvas script loaded.");
+
+var canvas = document.getElementById('drawingCanvas');
+var ctx = canvas.getContext('2d');
+var isDrawing = false;
+
+// Touch event listeners
+canvas.addEventListener('touchstart', function(e) {
+  e.preventDefault();
+  isDrawing = true;
+  ctx.beginPath();
+  var rect = canvas.getBoundingClientRect();
+  ctx.moveTo(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+}, { passive: false });
+
+canvas.addEventListener('touchmove', function(e) {
+  e.preventDefault();
+  if (isDrawing) {
+    var rect = canvas.getBoundingClientRect();
+    ctx.lineTo(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+    ctx.stroke();
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchend', function(e) {
+  e.preventDefault();
+  isDrawing = false;
+}, { passive: false });
+
+canvas.addEventListener('touchcancel', function(e) {
+  e.preventDefault();
+  isDrawing = false;
+}, { passive: false });

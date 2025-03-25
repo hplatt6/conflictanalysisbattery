@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Canvas Drawing</title>
+  <style>
+    body { margin: 0; }
+    #drawingCanvas { width: 100%; height: auto; aspect-ratio: 5/3; border: 1px solid #000; background-color: white; }
+  </style>
+</head>
+<body>
+  <canvas id="drawingCanvas"></canvas>
+  <script src="canvas.js"></script>
+</body>
+</html>
