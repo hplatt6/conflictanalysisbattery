@@ -40,7 +40,9 @@ function loadCanvasData() {
 }
 
 // Load saved canvas data on page load
-loadCanvasData();
+window.onload = function() {
+  loadCanvasData();
+};
 
 // Mouse event listeners
 canvas.addEventListener('mousedown', function(e) {
