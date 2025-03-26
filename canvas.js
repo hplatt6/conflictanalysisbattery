@@ -196,7 +196,4 @@ document.getElementById('undoButton').addEventListener('click', function(e) {
   undo();
 });
 
-document.getElementById('redoButton').addEventListener('click', function(e) {
-  e.preventDefault(); // Prevent default scroll behavior
-  redo();
-});
+document.getElementById('redoButton').
