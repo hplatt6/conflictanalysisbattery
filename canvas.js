@@ -35,6 +35,8 @@ function undo() {
       canvas.style.display = 'none';
       canvas.offsetHeight;
       canvas.style.display = 'block';
+      // Adjust scroll position
+      window.scrollTo(0, window.pageYOffset);
     };
   }
 }
@@ -51,6 +53,8 @@ function redo() {
       canvas.style.display = 'none';
       canvas.offsetHeight;
       canvas.style.display = 'block';
+      // Adjust scroll position
+      window.scrollTo(0, window.pageYOffset);
     };
   }
 }
@@ -131,9 +135,17 @@ document.getElementById('brushSizeSlider').addEventListener('input', function() 
 document.getElementById('undoButton').addEventListener('click', function(e) {
   e.preventDefault();
   undo();
+  // Blur any focused elements
+  document.activeElement.blur();
+  // Adjust scroll position
+  window.scrollTo(0, window.pageYOffset);
 });
 
 document.getElementById('redoButton').addEventListener('click', function(e) {
   e.preventDefault();
   redo();
+  // Blur any focused elements
+  document.activeElement.blur();
+  // Adjust scroll position
+  window.scrollTo(0, window.pageYOffset);
 });
