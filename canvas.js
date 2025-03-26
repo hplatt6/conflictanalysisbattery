@@ -54,6 +54,13 @@ function redo() {
   }
 }
 
+// Function to clear the canvas
+function clearCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  undoStack = [canvas.toDataURL()]; // Reset undo stack
+  redoStack = []; // Clear redo stack
+}
+
 // Mouse event listeners
 canvas.addEventListener('mousedown', function(e) {
   isDrawing = true;
@@ -134,5 +141,12 @@ document.getElementById('undoButton').addEventListener('click', function(e) {
 document.getElementById('redoButton').addEventListener('click', function(e) {
   e.preventDefault();
   redo();
+  document.activeElement.blur();
+});
+
+// Clear button handling
+document.getElementById('clearButton').addEventListener('click', function(e) {
+  e.preventDefault();
+  clearCanvas();
   document.activeElement.blur();
 });
