@@ -3,8 +3,8 @@ var ctx = canvas.getContext('2d');
 var isDrawing = false;
 var brushColor = 'black';
 var brushSize = 5;
-var historyStep = 0;
-var canvasHistory = [canvas.toDataURL()]; // Initialize with current state
+var undoStack = [canvas.toDataURL()]; // Initialize with current state
+var redoStack = [];
 
 // Set initial canvas size
 canvas.width = canvas.offsetWidth;
@@ -12,19 +12,16 @@ canvas.height = canvas.offsetHeight;
 
 // Function to save canvas state to history
 function saveHistory() {
-  if (historyStep < canvasHistory.length - 1) {
-    canvasHistory = canvasHistory.slice(0, historyStep + 1);
-  }
-  canvasHistory.push(canvas.toDataURL());
-  historyStep++;
+  undoStack.push(canvas.toDataURL());
+  redoStack = []; // Clear redo stack on new stroke
 }
 
 // Undo function
 function undo() {
-  if (historyStep > 0) {
-    historyStep--;
+  if (undoStack.length > 1) {
+    redoStack.push(undoStack.pop());
     var canvasPic = new Image();
-    canvasPic.src = canvasHistory[historyStep];
+    canvasPic.src = undoStack[undoStack.length - 1]; // Get last state from undoStack
     canvasPic.onload = function() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(canvasPic, 0, 0);
@@ -40,10 +37,10 @@ function undo() {
 
 // Redo function
 function redo() {
-  if (historyStep < canvasHistory.length - 1) { // Only redo if there's a state to go forward to
-    historyStep++;
+  if (redoStack.length > 0) {
+    undoStack.push(redoStack.pop());
     var canvasPic = new Image();
-    canvasPic.src = canvasHistory[historyStep];
+    canvasPic.src = undoStack[undoStack.length - 1]; // Get last state from undoStack
     canvasPic.onload = function() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(canvasPic, 0, 0);
