@@ -40,7 +40,7 @@ function undo() {
 
 // Redo function
 function redo() {
-  if (historyStep < canvasHistory.length - 1) {
+  if (historyStep < canvasHistory.length - 1) { // Only redo if there's a state to go forward to
     historyStep++;
     var canvasPic = new Image();
     canvasPic.src = canvasHistory[historyStep];
