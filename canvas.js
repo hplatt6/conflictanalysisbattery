@@ -3,8 +3,8 @@ var ctx = canvas.getContext('2d');
 var isDrawing = false;
 var brushColor = 'black';
 var brushSize = 5;
-var historyStep = 0;
-var canvasHistory = [canvas.toDataURL()]; // Initialize with current state
+var historyStep = 1; // Start at 1 to allow for undo
+var canvasHistory = [canvas.toDataURL(), canvas.toDataURL(), null]; // [prev, current, next]
 
 // Set initial canvas size
 canvas.width = canvas.offsetWidth;
@@ -12,13 +12,13 @@ canvas.height = canvas.offsetHeight;
 
 // Function to save canvas state to history
 function saveHistory() {
-  canvasHistory = [canvasHistory[historyStep], canvas.toDataURL()]; // Keep only previous and current
+  canvasHistory = [canvasHistory[1], canvas.toDataURL(), null]; // [current, new, null]
   historyStep = 1;
 }
 
 // Undo function
 function undo() {
-  if (historyStep > 0) {
+  if (historyStep > 0 && canvasHistory[0]) {
     historyStep = 0;
     var canvasPic = new Image();
     canvasPic.src = canvasHistory[historyStep];
@@ -37,8 +37,8 @@ function undo() {
 
 // Redo function
 function redo() {
-  if (historyStep < canvasHistory.length - 1) {
-    historyStep = 1;
+  if (historyStep < 2 && canvasHistory[2]) {
+    historyStep = 2;
     var canvasPic = new Image();
     canvasPic.src = canvasHistory[historyStep];
     canvasPic.onload = function() {
