@@ -6,7 +6,7 @@
     body { margin: 0; }
     #drawingCanvas {
       width: 100%;
-      max-width: 100%; /* Prevent it from getting too large */
+      max-width: 100%;
       height: auto;
       aspect-ratio: 5/3;
       border: 1px solid #000;
@@ -14,7 +14,6 @@
     }
     #colorButtons button { border: 1px solid #ccc; padding: 10px; margin: 5px; }
     #brushSizeSlider { width: 150px; }
-    #undoRedoButtons button { border: 1px solid #ccc; padding: 5px; margin: 2px; }
     #clearButton { border: 1px solid #ccc; padding: 5px; margin: 2px; }
   </style>
 </head>
@@ -38,9 +37,7 @@
     <button data-color="lightblue" style="background-color: lightblue;"></button>
     <button data-color="pink" style="background-color: pink;"></button>
   </div>
-  <div id="undoRedoButtons" style="margin-top: 10px;">
-    <button id="undoButton">&lt;</button>
-    <button id="redoButton">&gt;</button>
+  <div id="clearButtonContainer" style="margin-top: 10px;">
     <button id="clearButton">Clear</button>
   </div>
   <script src="canvas.js"></script>
