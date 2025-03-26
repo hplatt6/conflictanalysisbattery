@@ -4,7 +4,14 @@
   <title>Canvas Drawing</title>
   <style>
     body { margin: 0; }
-    #drawingCanvas { width: 100%; height: auto; aspect-ratio: 5/3; border: 1px solid #000; background-color: white; }
+    #drawingCanvas {
+      width: 100%;
+      max-width: 100%; /* Prevent it from getting too large */
+      height: auto;
+      aspect-ratio: 5/3;
+      border: 1px solid #000;
+      background-color: white;
+    }
     #colorButtons button { border: 1px solid #ccc; padding: 10px; margin: 5px; }
     #brushSizeSlider { width: 150px; }
     #undoRedoButtons button { border: 1px solid #ccc; padding: 5px; margin: 2px; }
