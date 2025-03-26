@@ -19,31 +19,35 @@ canvas.height = canvas.offsetHeight;
 
 // Function to save canvas state to history
 function saveHistory() {
-  if (Array.isArray(history)) { // Check if history is an array
-    history.push(canvas.toDataURL());
-    historyStep++;
-    if (history.length > 10) {
-      history.shift();
-      historyStep--;
-    }
-  } else {
-    console.error("history is not an array");
+  if (!Array.isArray(history)) {
+    console.error("history is not an array, re-initializing");
+    history = []; // Force re-initialization
+  }
+  history.push(canvas.toDataURL());
+  historyStep++;
+  if (history.length > 10) {
+    history.shift();
+    historyStep--;
   }
 }
 
 // Function to undo
 function undo() {
   console.log("undo");
+  if (!Array.isArray(history)) {
+    console.error("history is not an array, cannot undo");
+    return;
+  }
   if (historyStep > 0) {
     historyStep--;
-    if (Array.isArray(history) && history[historyStep]) { // Check if history is valid
+    if (history[historyStep]) { // Check if image source is valid
       var canvasPic = new Image();
       canvasPic.src = history[historyStep];
       canvasPic.onload = function() {
         ctx.drawImage(canvasPic, 0, 0);
       };
     } else {
-      console.error("Invalid history or historyStep");
+      console.error("Invalid history or historyStep, cannot undo");
     }
   }
 }
@@ -51,16 +55,20 @@ function undo() {
 // Function to redo
 function redo() {
   console.log("redo");
+  if (!Array.isArray(history)) {
+    console.error("history is not an array, cannot redo");
+    return;
+  }
   if (historyStep < history.length - 1) {
     historyStep++;
-    if (Array.isArray(history) && history[historyStep]) { // Check if history is valid
+    if (history[historyStep]) { // Check if image source is valid
       var canvasPic = new Image();
       canvasPic.src = history[historyStep];
       canvasPic.onload = function() {
         ctx.drawImage(canvasPic, 0, 0);
       };
     } else {
-      console.error("Invalid history or historyStep");
+      console.error("Invalid history or historyStep, cannot redo");
     }
   }
 }
