@@ -4,9 +4,17 @@ var isDrawing = false;
 var brushColor = 'black';
 var brushSize = 5;
 
+// Function to set canvas size
+function setCanvasSize() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
+
 // Set initial canvas size
-canvas.width = canvas.offsetWidth;
-canvas.height = canvas.offsetHeight;
+setCanvasSize();
+
+// Add resize event listener
+window.addEventListener('resize', setCanvasSize);
 
 // Function to clear the canvas
 function clearCanvas() {
