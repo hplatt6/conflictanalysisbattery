@@ -12,18 +12,36 @@ canvas.height = canvas.offsetHeight;
 
 // Function to save canvas state to history
 function saveHistory() {
+  if (historyStep < canvasHistory.length - 1) {
+    canvasHistory = canvasHistory.slice(0, historyStep + 1);
+  }
   canvasHistory.push(canvas.toDataURL());
   historyStep++;
-  if (canvasHistory.length > 2) { // Keep only two states in history
-    canvasHistory.shift();
-    historyStep--;
-  }
 }
 
 // Undo function
 function undo() {
   if (historyStep > 0) {
     historyStep--;
+    var canvasPic = new Image();
+    canvasPic.src = canvasHistory[historyStep];
+    canvasPic.onload = function() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(canvasPic, 0, 0);
+      canvas.style.display = 'none';
+      canvas.offsetHeight;
+      canvas.style.display = 'block';
+      setTimeout(function() {
+        window.scrollTo(0, window.pageYOffset);
+      }, 0);
+    };
+  }
+}
+
+// Redo function
+function redo() {
+  if (historyStep < canvasHistory.length - 1) {
+    historyStep++;
     var canvasPic = new Image();
     canvasPic.src = canvasHistory[historyStep];
     canvasPic.onload = function() {
@@ -112,5 +130,12 @@ document.getElementById('brushSizeSlider').addEventListener('input', function() 
 document.getElementById('undoButton').addEventListener('click', function(e) {
   e.preventDefault();
   undo();
+  document.activeElement.blur();
+});
+
+// Redo button handling
+document.getElementById('redoButton').addEventListener('click', function(e) {
+  e.preventDefault();
+  redo();
   document.activeElement.blur();
 });
