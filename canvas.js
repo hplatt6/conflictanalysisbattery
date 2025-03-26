@@ -9,7 +9,7 @@ var ctx = canvas.getContext('2d');
 var isDrawing = false;
 var brushColor = 'black';
 var brushSize = 5;
-var historyStep = -1;
+var historyStep = -1; // Initialize historyStep to -1
 
 // Set initial brush
 ctx.strokeStyle = brushColor;
@@ -51,6 +51,7 @@ function undo() {
       canvasPic.onload = function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
         ctx.drawImage(canvasPic, 0, 0);
+        ctx.stroke(); // Force canvas redraw
         console.log("Image loaded and drawn for undo");
       };
       canvasPic.onerror = function() {
@@ -78,6 +79,7 @@ function redo() {
       canvasPic.onload = function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
         ctx.drawImage(canvasPic, 0, 0);
+        ctx.stroke(); // Force canvas redraw
         console.log("Image loaded and drawn for redo");
       };
       canvasPic.onerror = function() {
@@ -96,7 +98,7 @@ canvas.addEventListener('mousedown', function(e) {
   isDrawing = true;
   ctx.beginPath();
   ctx.moveTo(e.offsetX, e.offsetY);
-  e.preventDefault();
+  // e.preventDefault(); // Remove preventDefault() for Safari
 });
 
 canvas.addEventListener('mousemove', function(e) {
