@@ -29,6 +29,7 @@ function saveHistory() {
 
 // Function to undo
 function undo() {
+  console.log("undo");
   if (historyStep > 0) {
     historyStep--;
     var canvasPic = new Image();
@@ -41,6 +42,7 @@ function undo() {
 
 // Function to redo
 function redo() {
+  console.log("redo");
   if (historyStep < history.length - 1) {
     historyStep++;
     var canvasPic = new Image();
@@ -123,6 +125,7 @@ canvas.addEventListener('touchcancel', function(e) {
 document.getElementById('colorButtons').addEventListener('click', function(e) {
   if (e.target.tagName === 'BUTTON') {
     brushColor = e.target.dataset.color;
+    console.log("Color changed to:", brushColor);
     ctx.strokeStyle = brushColor;
     ctx.fillStyle = brushColor;
     ctx.stroke(); // Force redraw
