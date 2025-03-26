@@ -3,8 +3,8 @@ var ctx = canvas.getContext('2d');
 var isDrawing = false;
 var brushColor = 'black';
 var brushSize = 5;
-var historyStep = 1; // Start at 1 to allow for undo
-var canvasHistory = [canvas.toDataURL(), canvas.toDataURL(), null]; // [prev, current, next]
+var historyStep = 1;
+var canvasHistory = [canvas.toDataURL(), canvas.toDataURL()];
 
 // Set initial canvas size
 canvas.width = canvas.offsetWidth;
@@ -12,7 +12,7 @@ canvas.height = canvas.offsetHeight;
 
 // Function to save canvas state to history
 function saveHistory() {
-  canvasHistory = [canvasHistory[1], canvas.toDataURL(), null]; // [current, new, null]
+  canvasHistory = [canvasHistory[1], canvas.toDataURL()];
   historyStep = 1;
 }
 
@@ -37,8 +37,8 @@ function undo() {
 
 // Redo function
 function redo() {
-  if (historyStep < 2 && canvasHistory[2]) {
-    historyStep = 2;
+  if (historyStep < 1 && canvasHistory[1]) {
+    historyStep = 1;
     var canvasPic = new Image();
     canvasPic.src = canvasHistory[historyStep];
     canvasPic.onload = function() {
@@ -112,8 +112,6 @@ document.getElementById('colorButtons').addEventListener('click', function(e) {
     brushColor = e.target.dataset.color;
     ctx.strokeStyle = brushColor;
     ctx.fillStyle = brushColor;
-    ctx.stroke(); // Force redraw
-    // Highlight the selected color button
     document.querySelectorAll('#colorButtons button').forEach(button => button.style.border = '1px solid #ccc');
     e.target.style.border = '3px solid gray';
   }
@@ -123,7 +121,6 @@ document.getElementById('colorButtons').addEventListener('click', function(e) {
 document.getElementById('brushSizeSlider').addEventListener('input', function() {
   brushSize = this.value;
   ctx.lineWidth = brushSize;
-  ctx.stroke(); // Force redraw
 });
 
 // Undo/Redo button handling

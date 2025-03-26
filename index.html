@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Canvas Drawing</title>
+  <style>
+    body { margin: 0; }
+    #drawingCanvas { width: 100%; height: auto; aspect-ratio: 5/3; border: 1px solid #000; background-color: white; }
+    #colorButtons button { border: 1px solid #ccc; padding: 10px; margin: 5px; }
+    #brushSizeSlider { width: 150px; }
+    #undoRedoButtons button { border: 1px solid #ccc; padding: 5px; margin: 2px; }
+  </style>
+</head>
+<body>
+  <div id="brushSizeSliderContainer" style="margin-bottom: 10px;">
+    <label for="brushSizeSlider">Brush Size: </label>
+    <input type="range" id="brushSizeSlider" min="1" max="20" value="5">
+  </div>
+  <canvas id="drawingCanvas"></canvas>
+  <div id="colorButtons" style="margin-top: 10px;">
+    <button data-color="red" style="background-color: red;"></button>
+    <button data-color="blue" style="background-color: blue;"></button>
+    <button data-color="black" style="background-color: black;"></button>
+    <button data-color="white" style="background-color: white;"></button>
+    <button data-color="gray" style="background-color: gray;"></button>
+    <button data-color="orange" style="background-color: orange;"></button>
+    <button data-color="purple" style="background-color: purple;"></button>
+    <button data-color="yellow" style="background-color: yellow;"></button>
+    <button data-color="green" style="background-color: green;"></button>
+    <button data-color="brown" style="background-color: brown;"></button>
+    <button data-color="lightblue" style="background-color: lightblue;"></button>
+    <button data-color="pink" style="background-color: pink;"></button>
+  </div>
+  <div id="undoRedoButtons" style="margin-top: 10px;">
+    <button id="undoButton">&lt;</button>
+    <button id="redoButton">&gt;</button>
+  </div>
+  <script src="canvas.js"></script>
+</body>
+</html>
