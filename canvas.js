@@ -1,11 +1,14 @@
 console.log("Canvas script loaded.");
 
+if (typeof canvasHistory === 'undefined' || !Array.isArray(canvasHistory)) {
+  var canvasHistory = []; // Force canvasHistory to be an array
+}
+
 var canvas = document.getElementById('drawingCanvas');
 var ctx = canvas.getContext('2d');
 var isDrawing = false;
 var brushColor = 'black';
 var brushSize = 5;
-var history = []; // Initialize history globally
 var historyStep = -1;
 
 // Set initial brush
@@ -19,62 +22,62 @@ canvas.height = canvas.offsetHeight;
 
 // Function to save canvas state to history
 function saveHistory() {
-  console.log("saveHistory called, history:", history);
-  if (!Array.isArray(history)) {
-    console.error("history is not an array, re-initializing");
-    history = []; // Force re-initialization
+  console.log("saveHistory called, canvasHistory:", canvasHistory);
+  if (!Array.isArray(canvasHistory)) {
+    console.error("canvasHistory is not an array, re-initializing");
+    canvasHistory = []; // Force re-initialization
   }
-  history.push(canvas.toDataURL());
+  canvasHistory.push(canvas.toDataURL());
   historyStep++;
-  if (history.length > 10) {
-    history.shift();
+  if (canvasHistory.length > 10) {
+    canvasHistory.shift();
     historyStep--;
   }
-  console.log("saveHistory completed, history:", history);
+  console.log("saveHistory completed, canvasHistory:", canvasHistory);
 }
 
 // Function to undo
 function undo() {
-  console.log("undo called, history:", history);
-  if (!Array.isArray(history)) {
-    console.error("history is not an array, cannot undo");
+  console.log("undo called, canvasHistory:", canvasHistory);
+  if (!Array.isArray(canvasHistory)) {
+    console.error("canvasHistory is not an array, cannot undo");
     return;
   }
   if (historyStep > 0) {
     historyStep--;
-    if (history[historyStep]) { // Check if image source is valid
+    if (canvasHistory[historyStep]) { // Check if image source is valid
       var canvasPic = new Image();
-      canvasPic.src = history[historyStep];
+      canvasPic.src = canvasHistory[historyStep];
       canvasPic.onload = function() {
         ctx.drawImage(canvasPic, 0, 0);
       };
     } else {
-      console.error("Invalid history or historyStep, cannot undo");
+      console.error("Invalid canvasHistory or historyStep, cannot undo");
     }
   }
-  console.log("undo completed, history:", history);
+  console.log("undo completed, canvasHistory:", canvasHistory);
 }
 
 // Function to redo
 function redo() {
-  console.log("redo called, history:", history);
-  if (!Array.isArray(history)) {
-    console.error("history is not an array, cannot redo");
+  console.log("redo called, canvasHistory:", canvasHistory);
+  if (!Array.isArray(canvasHistory)) {
+    console.error("canvasHistory is not an array, cannot redo");
     return;
   }
-  if (historyStep < history.length - 1) {
+  if (historyStep < canvasHistory.length - 1) {
     historyStep++;
-    if (history[historyStep]) { // Check if image source is valid
+    if (canvasHistory[historyStep]) { // Check if image source is valid
       var canvasPic = new Image();
-      canvasPic.src = history[historyStep];
+      canvasPic.src = canvasHistory[historyStep];
       canvasPic.onload = function() {
         ctx.drawImage(canvasPic, 0, 0);
       };
     } else {
-      console.error("Invalid history or historyStep, cannot redo");
+      console.error("Invalid canvasHistory or historyStep, cannot redo");
     }
   }
-  console.log("redo completed, history:", history);
+  console.log("redo completed, canvasHistory:", canvasHistory);
 }
 
 // Mouse event listeners
