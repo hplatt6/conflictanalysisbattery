@@ -5,7 +5,7 @@ var ctx = canvas.getContext('2d');
 var isDrawing = false;
 var brushColor = 'black';
 var brushSize = 5;
-var history = []; // Initialize history as an array (again, to be sure)
+var history = []; // Initialize history globally
 var historyStep = -1;
 
 // Set initial brush
@@ -19,6 +19,7 @@ canvas.height = canvas.offsetHeight;
 
 // Function to save canvas state to history
 function saveHistory() {
+  console.log("saveHistory called, history:", history);
   if (!Array.isArray(history)) {
     console.error("history is not an array, re-initializing");
     history = []; // Force re-initialization
@@ -29,11 +30,12 @@ function saveHistory() {
     history.shift();
     historyStep--;
   }
+  console.log("saveHistory completed, history:", history);
 }
 
 // Function to undo
 function undo() {
-  console.log("undo");
+  console.log("undo called, history:", history);
   if (!Array.isArray(history)) {
     console.error("history is not an array, cannot undo");
     return;
@@ -50,11 +52,12 @@ function undo() {
       console.error("Invalid history or historyStep, cannot undo");
     }
   }
+  console.log("undo completed, history:", history);
 }
 
 // Function to redo
 function redo() {
-  console.log("redo");
+  console.log("redo called, history:", history);
   if (!Array.isArray(history)) {
     console.error("history is not an array, cannot redo");
     return;
@@ -71,6 +74,7 @@ function redo() {
       console.error("Invalid history or historyStep, cannot redo");
     }
   }
+  console.log("redo completed, history:", history);
 }
 
 // Mouse event listeners
