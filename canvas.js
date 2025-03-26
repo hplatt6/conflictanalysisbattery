@@ -3,7 +3,7 @@ var ctx = canvas.getContext('2d');
 var isDrawing = false;
 var brushColor = 'black';
 var brushSize = 5;
-var historyStep = -1;
+var historyStep = 0; // Changed initial value to 0
 var canvasHistory = [];
 
 // Set initial canvas size
@@ -52,7 +52,7 @@ function redo() {
   }
 }
 
-// Event listeners
+// Mouse event listeners
 canvas.addEventListener('mousedown', function(e) {
   isDrawing = true;
   ctx.beginPath();
@@ -71,6 +71,46 @@ canvas.addEventListener('mouseup', function(e) {
   saveHistory();
 });
 
+// Touch event listeners
+canvas.addEventListener('touchstart', function(e) {
+  e.preventDefault();
+  isDrawing = true;
+  ctx.beginPath();
+  var rect = canvas.getBoundingClientRect();
+  var x = e.touches[0].clientX - rect.left;
+  var y = e.touches[0].clientY - rect.top;
+  ctx.moveTo(x, y);
+}, { passive: false });
+
+canvas.addEventListener('touchmove', function(e) {
+  e.preventDefault();
+  if (isDrawing) {
+    var rect = canvas.getBoundingClientRect();
+    var x = e.touches[0].clientX - rect.left;
+    var y = e.touches[0].clientY - rect.top;
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchend', function(e) {
+  e.preventDefault();
+  isDrawing = false;
+  saveHistory();
+}, { passive: false });
+
+canvas.addEventListener('touchcancel', function(e) {
+  e.preventDefault();
+  isDrawing = false;
+}, { passive: false });
+
 // Undo/Redo button handling
-document.getElementById('undoButton').addEventListener('click', undo);
-document.getElementById('redoButton').addEventListener('click', redo);
+document.getElementById('undoButton').addEventListener('click', function(e) {
+  e.preventDefault();
+  undo();
+});
+
+document.getElementById('redoButton').addEventListener('click', function(e) {
+  e.preventDefault();
+  redo();
+});
