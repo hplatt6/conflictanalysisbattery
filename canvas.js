@@ -129,6 +129,9 @@ document.getElementById('colorButtons').addEventListener('click', function(e) {
     ctx.strokeStyle = brushColor;
     ctx.fillStyle = brushColor;
     ctx.stroke(); // Force redraw
+    // Highlight the selected color button
+    document.querySelectorAll('#colorButtons button').forEach(button => button.style.border = '1px solid #ccc');
+    e.target.style.border = '3px solid gray';
   }
 });
 
