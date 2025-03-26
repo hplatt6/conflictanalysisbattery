@@ -22,7 +22,7 @@ canvas.height = canvas.offsetHeight;
 
 // Function to save canvas state to history
 function saveHistory() {
-  console.log("saveHistory called, canvasHistory:", canvasHistory);
+  console.log("saveHistory called, canvasHistory:", canvasHistory, "historyStep:", historyStep);
   if (!Array.isArray(canvasHistory)) {
     console.error("canvasHistory is not an array, re-initializing");
     canvasHistory = []; // Force re-initialization
@@ -33,18 +33,19 @@ function saveHistory() {
     canvasHistory.shift();
     historyStep--;
   }
-  console.log("saveHistory completed, canvasHistory:", canvasHistory);
+  console.log("saveHistory completed, canvasHistory:", canvasHistory, "historyStep:", historyStep);
 }
 
 // Function to undo
 function undo() {
-  console.log("undo called, canvasHistory:", canvasHistory);
+  console.log("undo called, canvasHistory:", canvasHistory, "historyStep:", historyStep);
   if (!Array.isArray(canvasHistory)) {
     console.error("canvasHistory is not an array, cannot undo");
     return;
   }
   if (historyStep > 0) {
     historyStep--;
+    console.log("undo: historyStep decremented to:", historyStep);
     if (canvasHistory[historyStep]) { // Check if image source is valid
       var canvasPic = new Image();
       canvasPic.src = canvasHistory[historyStep];
@@ -52,7 +53,11 @@ function undo() {
         ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
         ctx.drawImage(canvasPic, 0, 0);
         ctx.stroke(); // Force canvas redraw
-        console.log("Image loaded and drawn for undo");
+        // Force canvas redraw in Safari
+        canvas.style.display = 'none';
+        canvas.offsetHeight;
+        canvas.style.display = 'block';
+        console.log("Image loaded and drawn for undo, historyStep:", historyStep);
       };
       canvasPic.onerror = function() {
         console.error("Error loading image for undo");
@@ -61,18 +66,19 @@ function undo() {
       console.error("Invalid canvasHistory or historyStep, cannot undo");
     }
   }
-  console.log("undo completed, canvasHistory:", canvasHistory);
+  console.log("undo completed, canvasHistory:", canvasHistory, "historyStep:", historyStep);
 }
 
 // Function to redo
 function redo() {
-  console.log("redo called, canvasHistory:", canvasHistory);
+  console.log("redo called, canvasHistory:", canvasHistory, "historyStep:", historyStep);
   if (!Array.isArray(canvasHistory)) {
     console.error("canvasHistory is not an array, cannot redo");
     return;
   }
   if (historyStep < canvasHistory.length - 1) {
     historyStep++;
+    console.log("redo: historyStep incremented to:", historyStep);
     if (canvasHistory[historyStep]) { // Check if image source is valid
       var canvasPic = new Image();
       canvasPic.src = canvasHistory[historyStep];
@@ -80,7 +86,11 @@ function redo() {
         ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
         ctx.drawImage(canvasPic, 0, 0);
         ctx.stroke(); // Force canvas redraw
-        console.log("Image loaded and drawn for redo");
+        // Force canvas redraw in Safari
+        canvas.style.display = 'none';
+        canvas.offsetHeight;
+        canvas.style.display = 'block';
+        console.log("Image loaded and drawn for redo, historyStep:", historyStep);
       };
       canvasPic.onerror = function() {
         console.error("Error loading image for redo");
@@ -89,7 +99,7 @@ function redo() {
       console.error("Invalid canvasHistory or historyStep, cannot redo");
     }
   }
-  console.log("redo completed, canvasHistory:", canvasHistory);
+  console.log("redo completed, canvasHistory:", canvasHistory, "historyStep:", historyStep);
 }
 
 // Mouse event listeners
@@ -98,7 +108,6 @@ canvas.addEventListener('mousedown', function(e) {
   isDrawing = true;
   ctx.beginPath();
   ctx.moveTo(e.offsetX, e.offsetY);
-  // e.preventDefault(); // Remove preventDefault() for Safari
 });
 
 canvas.addEventListener('mousemove', function(e) {
