@@ -42,6 +42,7 @@ function undo() {
 // Mouse event listeners
 canvas.addEventListener('mousedown', function(e) {
   isDrawing = true;
+  saveHistory(); // Save state before starting stroke
   ctx.beginPath();
   ctx.moveTo(e.offsetX, e.offsetY);
 });
@@ -55,13 +56,13 @@ canvas.addEventListener('mousemove', function(e) {
 
 canvas.addEventListener('mouseup', function(e) {
   isDrawing = false;
-  saveHistory();
 });
 
 // Touch event listeners
 canvas.addEventListener('touchstart', function(e) {
   e.preventDefault();
   isDrawing = true;
+  saveHistory(); // Save state before starting stroke
   ctx.beginPath();
   var rect = canvas.getBoundingClientRect();
   var x = e.touches[0].clientX - rect.left;
@@ -83,7 +84,6 @@ canvas.addEventListener('touchmove', function(e) {
 canvas.addEventListener('touchend', function(e) {
   e.preventDefault();
   isDrawing = false;
-  saveHistory();
 }, { passive: false });
 
 canvas.addEventListener('touchcancel', function(e) {
@@ -113,24 +113,4 @@ document.getElementById('undoButton').addEventListener('click', function(e) {
   e.preventDefault();
   undo();
   document.activeElement.blur();
-});
-
-// Redo button handling (not needed for single-step)
-document.getElementById('redoButton').addEventListener('click', function(e) {
-  e.preventDefault();
-  if (historyStep < canvasHistory.length - 1) {
-    historyStep++;
-    var canvasPic = new Image();
-    canvasPic.src = canvasHistory[historyStep];
-    canvasPic.onload = function() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(canvasPic, 0, 0);
-      canvas.style.display = 'none';
-      canvas.offsetHeight;
-      canvas.style.display = 'block';
-      setTimeout(function() {
-        window.scrollTo(0, window.pageYOffset);
-      }, 0);
-    };
-  }
 });
