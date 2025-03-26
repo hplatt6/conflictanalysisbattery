@@ -50,6 +50,10 @@ function undo() {
       canvasPic.src = canvasHistory[historyStep];
       canvasPic.onload = function() {
         ctx.drawImage(canvasPic, 0, 0);
+        console.log("Image loaded and drawn for undo");
+      };
+      canvasPic.onerror = function() {
+        console.error("Error loading image for undo");
       };
     } else {
       console.error("Invalid canvasHistory or historyStep, cannot undo");
@@ -72,6 +76,10 @@ function redo() {
       canvasPic.src = canvasHistory[historyStep];
       canvasPic.onload = function() {
         ctx.drawImage(canvasPic, 0, 0);
+        console.log("Image loaded and drawn for redo");
+      };
+      canvasPic.onerror = function() {
+        console.error("Error loading image for redo");
       };
     } else {
       console.error("Invalid canvasHistory or historyStep, cannot redo");
