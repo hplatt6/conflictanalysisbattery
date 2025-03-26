@@ -5,13 +5,14 @@
   <style>
     body { margin: 0; }
     #drawingCanvas { width: 100%; height: auto; aspect-ratio: 5/3; border: 1px solid #000; background-color: white; }
-    #colorButtons button { border: 1px solid #ccc; padding: 5px; margin: 2px; }
+    #colorButtons button { border: 1px solid #ccc; padding: 10px; margin: 5px; } /* Increased button size */
     #brushSizeSlider { width: 150px; }
     #undoRedoButtons button { border: 1px solid #ccc; padding: 5px; margin: 2px; }
   </style>
 </head>
 <body>
   <div id="brushSizeSliderContainer" style="margin-bottom: 10px;">
+    <label for="brushSizeSlider">Brush Size: </label>
     <input type="range" id="brushSizeSlider" min="1" max="20" value="5">
   </div>
   <canvas id="drawingCanvas"></canvas>
@@ -25,7 +26,6 @@
     <button data-color="purple" style="background-color: purple;"></button>
     <button data-color="yellow" style="background-color: yellow;"></button>
     <button data-color="green" style="background-color: green;"></button>
-    <button data-color="transparent" style="background-color: transparent;">Erase</button>
   </div>
   <div id="undoRedoButtons" style="margin-top: 10px;">
     <button id="undoButton">&lt;</button>
