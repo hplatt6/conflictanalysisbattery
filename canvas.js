@@ -193,4 +193,10 @@ document.getElementById('brushSizeSlider').addEventListener('input', function() 
 // Undo/redo button handling
 document.getElementById('undoButton').addEventListener('click', function(e) {
   e.preventDefault(); // Prevent default scroll behavior
-  undo
+  undo();
+});
+
+document.getElementById('redoButton').addEventListener('click', function(e) {
+  e.preventDefault(); // Prevent default scroll behavior
+  redo();
+});
