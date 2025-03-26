@@ -60,7 +60,6 @@ canvas.addEventListener('mousedown', function(e) {
   ctx.beginPath();
   ctx.moveTo(e.offsetX, e.offsetY);
   e.preventDefault();
-  saveHistory();
 });
 
 canvas.addEventListener('mousemove', function(e) {
@@ -74,6 +73,7 @@ canvas.addEventListener('mousemove', function(e) {
 canvas.addEventListener('mouseup', function(e) {
   console.log("mouseup");
   isDrawing = false;
+  saveHistory(); // Save state after drawing
 });
 
 canvas.addEventListener('mouseout', function(e) {
@@ -92,7 +92,6 @@ canvas.addEventListener('touchstart', function(e) {
   var y = e.touches[0].clientY - rect.top;
   ctx.moveTo(x, y);
   canvas.setPointerCapture(e.pointerId);
-  saveHistory();
 }, { passive: false });
 
 canvas.addEventListener('touchmove', function(e) {
@@ -112,6 +111,7 @@ canvas.addEventListener('touchend', function(e) {
   e.preventDefault();
   isDrawing = false;
   canvas.releasePointerCapture(e.pointerId);
+  saveHistory(); // Save state after drawing
 }, { passive: false });
 
 canvas.addEventListener('touchcancel', function(e) {
