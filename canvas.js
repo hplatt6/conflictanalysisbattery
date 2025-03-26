@@ -3,12 +3,15 @@ var ctx = canvas.getContext('2d');
 var isDrawing = false;
 var brushColor = 'black';
 var brushSize = 5;
-var historyStep = 0; // Changed initial value to 0
+var historyStep = 0;
 var canvasHistory = [];
 
 // Set initial canvas size
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
+
+// Save initial canvas state
+saveHistory();
 
 // Function to save canvas state to history
 function saveHistory() {
@@ -103,6 +106,26 @@ canvas.addEventListener('touchcancel', function(e) {
   e.preventDefault();
   isDrawing = false;
 }, { passive: false });
+
+// Color button handling
+document.getElementById('colorButtons').addEventListener('click', function(e) {
+  if (e.target.tagName === 'BUTTON') {
+    brushColor = e.target.dataset.color;
+    ctx.strokeStyle = brushColor;
+    ctx.fillStyle = brushColor;
+    ctx.stroke(); // Force redraw
+    // Highlight the selected color button
+    document.querySelectorAll('#colorButtons button').forEach(button => button.style.border = '1px solid #ccc');
+    e.target.style.border = '3px solid gray';
+  }
+});
+
+// Brush size slider handling
+document.getElementById('brushSizeSlider').addEventListener('input', function() {
+  brushSize = this.value;
+  ctx.lineWidth = brushSize;
+  ctx.stroke(); // Force redraw
+});
 
 // Undo/Redo button handling
 document.getElementById('undoButton').addEventListener('click', function(e) {
