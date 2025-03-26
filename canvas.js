@@ -5,7 +5,7 @@ var ctx = canvas.getContext('2d');
 var isDrawing = false;
 var brushColor = 'black';
 var brushSize = 5;
-var history = []; // Initialize history as an array
+var history = []; // Initialize history as an array (again, to be sure)
 var historyStep = -1;
 
 // Set initial brush
@@ -19,11 +19,15 @@ canvas.height = canvas.offsetHeight;
 
 // Function to save canvas state to history
 function saveHistory() {
-  history.push(canvas.toDataURL());
-  historyStep++;
-  if (history.length > 10) {
-    history.shift();
-    historyStep--;
+  if (Array.isArray(history)) { // Check if history is an array
+    history.push(canvas.toDataURL());
+    historyStep++;
+    if (history.length > 10) {
+      history.shift();
+      historyStep--;
+    }
+  } else {
+    console.error("history is not an array");
   }
 }
 
@@ -32,11 +36,15 @@ function undo() {
   console.log("undo");
   if (historyStep > 0) {
     historyStep--;
-    var canvasPic = new Image();
-    canvasPic.src = history[historyStep];
-    canvasPic.onload = function() {
-      ctx.drawImage(canvasPic, 0, 0);
-    };
+    if (Array.isArray(history) && history[historyStep]) { // Check if history is valid
+      var canvasPic = new Image();
+      canvasPic.src = history[historyStep];
+      canvasPic.onload = function() {
+        ctx.drawImage(canvasPic, 0, 0);
+      };
+    } else {
+      console.error("Invalid history or historyStep");
+    }
   }
 }
 
@@ -45,12 +53,14 @@ function redo() {
   console.log("redo");
   if (historyStep < history.length - 1) {
     historyStep++;
-    if (history[historyStep]) { // Check if image source is valid
+    if (Array.isArray(history) && history[historyStep]) { // Check if history is valid
       var canvasPic = new Image();
       canvasPic.src = history[historyStep];
       canvasPic.onload = function() {
         ctx.drawImage(canvasPic, 0, 0);
       };
+    } else {
+      console.error("Invalid history or historyStep");
     }
   }
 }
