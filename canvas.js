@@ -49,6 +49,7 @@ function undo() {
       var canvasPic = new Image();
       canvasPic.src = canvasHistory[historyStep];
       canvasPic.onload = function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
         ctx.drawImage(canvasPic, 0, 0);
         console.log("Image loaded and drawn for undo");
       };
@@ -75,6 +76,7 @@ function redo() {
       var canvasPic = new Image();
       canvasPic.src = canvasHistory[historyStep];
       canvasPic.onload = function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
         ctx.drawImage(canvasPic, 0, 0);
         console.log("Image loaded and drawn for redo");
       };
