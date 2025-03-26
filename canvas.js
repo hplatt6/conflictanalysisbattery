@@ -5,7 +5,7 @@ var ctx = canvas.getContext('2d');
 var isDrawing = false;
 var brushColor = 'black';
 var brushSize = 5;
-var history = [];
+var history = []; // Initialize history as an array
 var historyStep = -1;
 
 // Set initial brush
@@ -45,11 +45,13 @@ function redo() {
   console.log("redo");
   if (historyStep < history.length - 1) {
     historyStep++;
-    var canvasPic = new Image();
-    canvasPic.src = history[historyStep];
-    canvasPic.onload = function() {
-      ctx.drawImage(canvasPic, 0, 0);
-    };
+    if (history[historyStep]) { // Check if image source is valid
+      var canvasPic = new Image();
+      canvasPic.src = history[historyStep];
+      canvasPic.onload = function() {
+        ctx.drawImage(canvasPic, 0, 0);
+      };
+    }
   }
 }
 
