@@ -4,29 +4,22 @@ var isDrawing = false;
 var brushColor = 'black';
 var brushSize = 5;
 var historyStep = 0;
-var canvasHistory = [];
+var canvasHistory = [canvas.toDataURL()]; // Initialize with current state
 
 // Set initial canvas size
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 
-// Save initial canvas state
-saveHistory();
-
 // Function to save canvas state to history
 function saveHistory() {
-  canvasHistory.push(canvas.toDataURL());
-  historyStep++;
-  if (canvasHistory.length > 10) {
-    canvasHistory.shift();
-    historyStep--;
-  }
+  canvasHistory = [canvasHistory[historyStep], canvas.toDataURL()]; // Keep only previous and current
+  historyStep = 1;
 }
 
 // Undo function
 function undo() {
   if (historyStep > 0) {
-    historyStep--;
+    historyStep = 0;
     var canvasPic = new Image();
     canvasPic.src = canvasHistory[historyStep];
     canvasPic.onload = function() {
@@ -35,8 +28,9 @@ function undo() {
       canvas.style.display = 'none';
       canvas.offsetHeight;
       canvas.style.display = 'block';
-      // Adjust scroll position
-      window.scrollTo(0, window.pageYOffset);
+      setTimeout(function() {
+        window.scrollTo(0, window.pageYOffset);
+      }, 0);
     };
   }
 }
@@ -44,7 +38,7 @@ function undo() {
 // Redo function
 function redo() {
   if (historyStep < canvasHistory.length - 1) {
-    historyStep++;
+    historyStep = 1;
     var canvasPic = new Image();
     canvasPic.src = canvasHistory[historyStep];
     canvasPic.onload = function() {
@@ -53,8 +47,9 @@ function redo() {
       canvas.style.display = 'none';
       canvas.offsetHeight;
       canvas.style.display = 'block';
-      // Adjust scroll position
-      window.scrollTo(0, window.pageYOffset);
+      setTimeout(function() {
+        window.scrollTo(0, window.pageYOffset);
+      }, 0);
     };
   }
 }
@@ -135,17 +130,11 @@ document.getElementById('brushSizeSlider').addEventListener('input', function() 
 document.getElementById('undoButton').addEventListener('click', function(e) {
   e.preventDefault();
   undo();
-  // Blur any focused elements
   document.activeElement.blur();
-  // Adjust scroll position
-  window.scrollTo(0, window.pageYOffset);
 });
 
 document.getElementById('redoButton').addEventListener('click', function(e) {
   e.preventDefault();
   redo();
-  // Blur any focused elements
   document.activeElement.blur();
-  // Adjust scroll position
-  window.scrollTo(0, window.pageYOffset);
 });
