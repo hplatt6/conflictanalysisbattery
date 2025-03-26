@@ -19,7 +19,28 @@ window.addEventListener('resize', setCanvasSize);
 // Function to clear the canvas
 function clearCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  saveCanvasData(); // Save cleared state
 }
+
+// Function to save canvas data to Qualtrics
+function saveCanvasData() {
+  Qualtrics.SurveyEngine.setEmbeddedData('canvasData', canvas.toDataURL());
+}
+
+// Function to load canvas data from Qualtrics
+function loadCanvasData() {
+  var savedData = Qualtrics.SurveyEngine.getEmbeddedData('canvasData');
+  if (savedData) {
+    var img = new Image();
+    img.onload = function() {
+      ctx.drawImage(img, 0, 0);
+    };
+    img.src = savedData;
+  }
+}
+
+// Load saved canvas data on page load
+loadCanvasData();
 
 // Mouse event listeners
 canvas.addEventListener('mousedown', function(e) {
@@ -37,6 +58,7 @@ canvas.addEventListener('mousemove', function(e) {
 
 canvas.addEventListener('mouseup', function(e) {
   isDrawing = false;
+  saveCanvasData(); // Save on mouse up
 });
 
 // Touch event listeners
@@ -64,6 +86,7 @@ canvas.addEventListener('touchmove', function(e) {
 canvas.addEventListener('touchend', function(e) {
   e.preventDefault();
   isDrawing = false;
+  saveCanvasData(); // Save on touch end
 }, { passive: false });
 
 canvas.addEventListener('touchcancel', function(e) {
