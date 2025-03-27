@@ -3,11 +3,18 @@ var ctx = canvas.getContext('2d');
 var isDrawing = false;
 var brushColor = 'black';
 var brushSize = 5;
+var imageData; // Variable to store canvas data
 
 // Function to set canvas size
 function setCanvasSize() {
+  imageData = canvas.toDataURL(); // Store current canvas data
   canvas.width = canvas.offsetWidth;
   canvas.height = canvas.offsetHeight;
+  var img = new Image();
+  img.onload = function() {
+    ctx.drawImage(img, 0, 0); // Redraw stored image
+  };
+  img.src = imageData;
 }
 
 // Set initial canvas size
